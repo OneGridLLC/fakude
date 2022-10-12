@@ -18,7 +18,7 @@ var libConn *libvirt.Connect
 func main() {
 	conn, err := libvirt.NewConnect("qemu:///system")
 	if err != nil {
-		panic("Connection Failed to KVM")
+		panic(err)
 	}
 
 	libConn = conn

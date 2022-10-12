@@ -12,7 +12,7 @@ import (
 func domains(w http.ResponseWriter, r *http.Request) {
 	doms, err := libConn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE)
 	if err != nil {
-		fmt.Printf("Failed to get Domains from KVM!")
+		fmt.Println(err)
 	}
 
 	var returnObject []DomainAPIReturnType
