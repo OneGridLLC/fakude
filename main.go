@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"libvirt.org/go/libvirt"
 )
 
@@ -25,12 +24,17 @@ func main() {
 
 	defer conn.Close()
 
-	r := mux.NewRouter()
-	r.HandleFunc("/domains", domains)
+	http.HandleFunc("/", baseHandler) // ping
 
-	r.HandleFunc("/startDomain", startDomain)
+	http.HandleFunc("/auth", authHandler) // login with RBAC
 
-	r.HandleFunc("/stopDomain", stopDomain)
+	http.HandleFunc("/domains", domainsHandler) // get info on active domains
 
-	log.Fatal(http.ListenAndServe(":9090", r))
+	http.HandleFunc("/manage", manageHandler) // start, stop, create, reinstall, delete
+
+	http.HandleFunc("/image", imageHandler) // upload VM images to S3 from template or ISO
+
+	http.HandleFunc("/console", consoleHandler) // VNC endpoint
+
+	log.Fatal(http.ListenAndServe(":9090", nil))
 }
